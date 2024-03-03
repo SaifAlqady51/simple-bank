@@ -1,0 +1,14 @@
+version: "2"
+plugins:
+  - name: golang
+    wasm:
+      url: https://downloads.sqlc.dev/plugin/sqlc-gen-go_1.2.0.wasm
+      sha256: 965d73d22711eee3a210565e66f918b8cb831c5f5b612e680642a4a785dd1ca1
+sql:
+  - schema: db/migration
+    queries: db/query
+    engine: postgresql
+    gen:
+      go:
+        package: authors
+        out: db/sqlc
