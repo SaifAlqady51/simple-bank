@@ -20,7 +20,7 @@ type Entery struct {
 	ID        int64
 	AccountID int64
 	// can be negative or positive
-	Amout     int64
+	Amount    int64
 	CreatedAt time.Time
 }
 
@@ -29,6 +29,6 @@ type Transfer struct {
 	FromAccountID int64
 	ToAccountID   int64
 	// it must be positive
-	Amout     int64
+	Amount    int64
 	CreatedAt time.Time
 }
