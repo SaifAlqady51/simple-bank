@@ -21,10 +21,9 @@ OFFSET $2;
 -- name: UpdateEntry :one
 UPDATE enteries
 SET amount = $2
-WHERE $1
-RETURNING *;
-
--- name: DeleteEntry :one
-DELETE FROM enteries
 WHERE id = $1
 RETURNING *;
+
+-- name: DeleteEntry :exec
+DELETE FROM enteries
+WHERE id = $1;

@@ -36,22 +36,14 @@ func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Enter
 	return i, err
 }
 
-const deleteEntry = `-- name: DeleteEntry :one
+const deleteEntry = `-- name: DeleteEntry :exec
 DELETE FROM enteries
 WHERE id = $1
-RETURNING id, account_id, amount, created_at
 `
 
-func (q *Queries) DeleteEntry(ctx context.Context, id int64) (Entery, error) {
-	row := q.db.QueryRowContext(ctx, deleteEntry, id)
-	var i Entery
-	err := row.Scan(
-		&i.ID,
-		&i.AccountID,
-		&i.Amount,
-		&i.CreatedAt,
-	)
-	return i, err
+func (q *Queries) DeleteEntry(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteEntry, id)
+	return err
 }
 
 const getEntry = `-- name: GetEntry :one
@@ -114,17 +106,17 @@ func (q *Queries) ListEntry(ctx context.Context, arg ListEntryParams) ([]Entery,
 const updateEntry = `-- name: UpdateEntry :one
 UPDATE enteries
 SET amount = $2
-WHERE $1
+WHERE id = $1
 RETURNING id, account_id, amount, created_at
 `
 
 type UpdateEntryParams struct {
-	Column1 interface{}
-	Amount  int64
+	ID     int64
+	Amount int64
 }
 
 func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entery, error) {
-	row := q.db.QueryRowContext(ctx, updateEntry, arg.Column1, arg.Amount)
+	row := q.db.QueryRowContext(ctx, updateEntry, arg.ID, arg.Amount)
 	var i Entery
 	err := row.Scan(
 		&i.ID,

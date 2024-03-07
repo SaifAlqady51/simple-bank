@@ -23,7 +23,6 @@ SET balance = $2
 WHERE id = $1
 RETURNING * ;
 
--- name: DeleteAccount :one
+-- name: DeleteAccount :exec
 DELETE FROM accounts 
-WHERE id = $1
-RETURNING * ;
+WHERE id = $1;
