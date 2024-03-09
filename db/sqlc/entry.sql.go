@@ -10,7 +10,7 @@ import (
 )
 
 const createEntry = `-- name: CreateEntry :one
-INSERT INTO enteries (
+INSERT INTO entries (
     account_id,
     amount 
 ) VALUES (
@@ -24,9 +24,9 @@ type CreateEntryParams struct {
 	Amount    int64
 }
 
-func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entery, error) {
+func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, createEntry, arg.AccountID, arg.Amount)
-	var i Entery
+	var i Entry
 	err := row.Scan(
 		&i.ID,
 		&i.AccountID,
@@ -37,7 +37,7 @@ func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Enter
 }
 
 const deleteEntry = `-- name: DeleteEntry :exec
-DELETE FROM enteries
+DELETE FROM entries
 WHERE id = $1
 `
 
@@ -47,13 +47,13 @@ func (q *Queries) DeleteEntry(ctx context.Context, id int64) error {
 }
 
 const getEntry = `-- name: GetEntry :one
-SELECT id, account_id, amount, created_at FROM enteries
+SELECT id, account_id, amount, created_at FROM entries
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetEntry(ctx context.Context, id int64) (Entery, error) {
+func (q *Queries) GetEntry(ctx context.Context, id int64) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, getEntry, id)
-	var i Entery
+	var i Entry
 	err := row.Scan(
 		&i.ID,
 		&i.AccountID,
@@ -64,7 +64,7 @@ func (q *Queries) GetEntry(ctx context.Context, id int64) (Entery, error) {
 }
 
 const listEntry = `-- name: ListEntry :many
-SELECT id, account_id, amount, created_at FROM enteries
+SELECT id, account_id, amount, created_at FROM entries
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -75,15 +75,15 @@ type ListEntryParams struct {
 	Offset int32
 }
 
-func (q *Queries) ListEntry(ctx context.Context, arg ListEntryParams) ([]Entery, error) {
+func (q *Queries) ListEntry(ctx context.Context, arg ListEntryParams) ([]Entry, error) {
 	rows, err := q.db.QueryContext(ctx, listEntry, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Entery
+	var items []Entry
 	for rows.Next() {
-		var i Entery
+		var i Entry
 		if err := rows.Scan(
 			&i.ID,
 			&i.AccountID,
@@ -104,7 +104,7 @@ func (q *Queries) ListEntry(ctx context.Context, arg ListEntryParams) ([]Entery,
 }
 
 const updateEntry = `-- name: UpdateEntry :one
-UPDATE enteries
+UPDATE entries
 SET amount = $2
 WHERE id = $1
 RETURNING id, account_id, amount, created_at
@@ -115,9 +115,9 @@ type UpdateEntryParams struct {
 	Amount int64
 }
 
-func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entery, error) {
+func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, updateEntry, arg.ID, arg.Amount)
-	var i Entery
+	var i Entry
 	err := row.Scan(
 		&i.ID,
 		&i.AccountID,

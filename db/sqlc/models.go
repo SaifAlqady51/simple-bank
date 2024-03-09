@@ -16,7 +16,7 @@ type Account struct {
 	CreatedAt time.Time
 }
 
-type Entery struct {
+type Entry struct {
 	ID        int64
 	AccountID int64
 	// can be negative or positive

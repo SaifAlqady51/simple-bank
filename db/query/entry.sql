@@ -1,6 +1,6 @@
 
 -- name: CreateEntry :one
-INSERT INTO enteries (
+INSERT INTO entries (
     account_id,
     amount 
 ) VALUES (
@@ -9,21 +9,21 @@ INSERT INTO enteries (
  RETURNING * ;
 
 -- name: GetEntry :one
-SELECT * FROM enteries
+SELECT * FROM entries
 WHERE id = $1 LIMIT 1 ;
 
 -- name: ListEntry :many
-SELECT * FROM enteries
+SELECT * FROM entries
 ORDER BY id
 LIMIT $1
 OFFSET $2;
 
 -- name: UpdateEntry :one
-UPDATE enteries
+UPDATE entries
 SET amount = $2
 WHERE id = $1
 RETURNING *;
 
 -- name: DeleteEntry :exec
-DELETE FROM enteries
+DELETE FROM entries
 WHERE id = $1;

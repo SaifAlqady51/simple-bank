@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomEntry(t *testing.T) Entery {
+func createRandomEntry(t *testing.T) Entry {
 
 	account := createRandomAccount(t)
 	arg := CreateEntryParams{
