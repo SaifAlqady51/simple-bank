@@ -23,7 +23,6 @@ SET amount = $2
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteTransfer :one
+-- name: DeleteTransfer :exec
 DELETE FROM transfers 
-WHERE id = $1 
-RETURNING * ;
+WHERE id = $1 ;
