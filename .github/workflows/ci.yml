@@ -42,6 +42,7 @@ jobs:
       - name: Install go-lang migrat
         run: |
           curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-arm64.tar.gz | tar xvz
+          which migrate
 
       - name: Run migrations
         run: make migrateup
