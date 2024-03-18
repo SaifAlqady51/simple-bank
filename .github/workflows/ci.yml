@@ -54,7 +54,7 @@ jobs:
           echo DB_DRIVER=${{secrets.DB_DRIVER}} >> app.env
           echo DB_SOURCE=${{secrets.DB_SOURSE}} >> app.env
           echo SERVER_ADDRESS=${{secrets.SERVER_ADDRESS}} >> app.env
-          cat .env
+          cat app.env
 
       - name: Test
         run: go test -v ./...
