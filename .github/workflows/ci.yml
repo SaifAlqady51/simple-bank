@@ -68,6 +68,7 @@ jobs:
         run: |
           touch app.env
           echo SERVER_ADDRESS="$SERVER_ADDRESS" >> app.env
+          cat app.env
 
       - name: Test
         run: go test -v ./...
