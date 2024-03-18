@@ -48,26 +48,12 @@ jobs:
       - name: Run migrations
         run: make migrateup
 
-      - name: "Added DB_DRIVER"
-        env:
-          DB_DRIVER: ${{secrets.DB_DRIVER}}
+      - name: "Create env file"
         run: |
           touch app.env
-          echo DB_DRIVER="$DB_DRIVER" >> app.env
-
-      - name: "Added DB_SOURCE"
-        env:
-          DB_SOURCE: ${{secrets.DB_SOURCE}}
-        run: |
-          touch app.env
-          echo DB_SOURCE="$DB_SOURCE" >> app.env
-
-      - name: "Added SERVER_ADDRESS"
-        env:
-          SERVER_ADDRESS: ${{secrets.SERVER_ADDRESS}}
-        run: |
-          touch app.env
-          echo SERVER_ADDRESS="$SERVER_ADDRESS" >> app.env
+          echo DB_DRIVER=${{secrets.DB_DRIVER}} >> app.env
+          echo DB_SOURCE=${{secrets.DB_SOURCE}} >> app.env
+          echo SERVER_ADDRESS=${{secrets.SERVER_ADDRESS}} >> app.env
           cat app.env
 
       - name: Test
