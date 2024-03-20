@@ -11,15 +11,19 @@ import (
 )
 
 func main() {
+	// get env vairables
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Cannot load config ", err)
 	}
+	// connect to the database
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("we can't connect to the database")
 	}
+	// new Store
 	store := db.NewStore(conn)
+	// start a new Server
 	server := api.NewServer(store)
 
 	err = server.Start(config.ServerAddress)
