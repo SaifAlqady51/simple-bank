@@ -10,15 +10,15 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/require"
+
 	mockdb "github.com/SaifAlqady51/simple-bank/db/mock"
 	db "github.com/SaifAlqady51/simple-bank/db/sqlc"
 	"github.com/SaifAlqady51/simple-bank/util"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/require"
 )
 
 func TestGetAccountAPI(t *testing.T) {
-
 	account := createRandomAccount()
 
 	testCases := []struct {
@@ -40,7 +40,6 @@ func TestGetAccountAPI(t *testing.T) {
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
 				requiredBodyMatchAccount(t, recorder.Body, account)
-
 			},
 		},
 		{
@@ -90,7 +89,6 @@ func TestGetAccountAPI(t *testing.T) {
 
 		tc := testCases[i]
 		t.Run(tc.name, func(t *testing.T) {
-
 			ctrl := gomock.NewController(t)
 
 			defer ctrl.Finish()
@@ -115,7 +113,6 @@ func TestGetAccountAPI(t *testing.T) {
 			tc.checkResponse(t, recorder)
 		})
 	}
-
 }
 
 func createRandomAccount() db.Account {
@@ -128,7 +125,6 @@ func createRandomAccount() db.Account {
 }
 
 func requiredBodyMatchAccount(t *testing.T, body *bytes.Buffer, account db.Account) {
-
 	data, err := io.ReadAll(body)
 	require.NoError(t, err)
 	var gotAccount db.Account
