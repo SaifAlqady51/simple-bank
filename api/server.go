@@ -1,20 +1,35 @@
 package api
 
 import (
+	"fmt"
+
 	db "github.com/SaifAlqady51/simple-bank/db/sqlc"
+	"github.com/SaifAlqady51/simple-bank/token"
+	"github.com/SaifAlqady51/simple-bank/util"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	tokenMaker token.Maker
+	store      db.Store
+	router     *gin.Engine
+	config     util.Config
 }
 
 // NewServer function creates a new HTTP server and setup routing
-func NewServer(store db.Store) *Server {
-	server := &Server{store: store}
+func NewServer(config util.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: current token length is %d %w", len(config.TokenSymmetricKey), err)
+	}
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
 
 	router := gin.Default()
 
@@ -32,10 +47,11 @@ func NewServer(store db.Store) *Server {
 
 	// Users endpoints
 	router.POST("/users", server.CreateUser)
+	router.POST("/users/login", server.loginUser)
 
 	server.router = router
 
-	return server
+	return server, nil
 
 }
 
