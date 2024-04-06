@@ -165,7 +165,7 @@ func TestCreateUserAPI(t *testing.T) {
 
 			// start test server and send requests
 
-			server := NewServer(store)
+			server := NewTestServer(t, store)
 			recorder := httptest.NewRecorder()
 			data, err := json.Marshal(tc.body)
 
