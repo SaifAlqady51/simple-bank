@@ -13,7 +13,7 @@ import (
 const (
 	authorizationHeaderKey  = "authorization"
 	authorizationTypeBearer = "bearer"
-	authorizationPayload    = "authorization_payload"
+	authorizationPayloadKey = "authorization_payload"
 )
 
 func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
@@ -43,7 +43,7 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		}
 
 		// check if api call header second section is the verified access token
-		accessToken := fields[0]
+		accessToken := fields[1]
 		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse(err))
@@ -51,8 +51,10 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		}
 
 		// set payload to authorization_payload
+		fmt.Print("payload from middleware")
+		fmt.Print(payload)
 
-		ctx.Set(authorizationPayload, payload)
+		ctx.Set(authorizationPayloadKey, payload)
 		ctx.Next()
 
 	}
