@@ -2,9 +2,11 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
 
 	db "github.com/SaifAlqady51/simple-bank/db/sqlc"
+	"github.com/SaifAlqady51/simple-bank/token"
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 )
@@ -21,8 +23,10 @@ func (server *Server) createAccount(ctx *gin.Context) {
 		return
 	}
 
+	authorizatoinPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
 	arg := db.CreateAccountParams{
-		Owner:    req.Owner,
+		Owner:    authorizatoinPayload.Username,
 		Currency: req.Currency,
 		Balance:  0,
 	}
@@ -68,6 +72,14 @@ func (server *Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
+	authorizationPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	if account.Owner != authorizationPayload.Username {
+		err := errors.New("account does not belong to that user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
 	ctx.JSON(http.StatusOK, account)
 }
 
@@ -84,7 +96,10 @@ func (server *Server) listAccounts(ctx *gin.Context) {
 		return
 	}
 
+	authorizatoinPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
 	arg := db.ListAccountParams{
+		Owner:  authorizatoinPayload.Username,
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}

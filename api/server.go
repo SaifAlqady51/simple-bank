@@ -37,13 +37,14 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 		v.RegisterValidation("currency", validCurrency)
 	}
 
+	authRoute := router.Group("/").Use(authMiddleware(server.tokenMaker))
 	// Accounts Endpoints
-	router.POST("/accounts", server.createAccount)
-	router.GET("/accounts/:id", server.getAccount)
-	router.GET("/accounts", server.listAccounts)
+	authRoute.POST("/accounts", server.createAccount)
+	authRoute.GET("/accounts/:id", server.getAccount)
+	authRoute.GET("/accounts", server.listAccounts)
 
 	// Transfers endpoints
-	router.POST("/transfers", server.createTransfer)
+	authRoute.POST("/transfers", server.createTransfer)
 
 	// Users endpoints
 	router.POST("/users", server.CreateUser)
