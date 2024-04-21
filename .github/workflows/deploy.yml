@@ -21,7 +21,7 @@ jobs:
           role-to-assume: arn:aws:iam::471112519408:role/simplebank-role
           aws-region: us-east-1
 
-      - name: Lgoin to Amazon ECR
+      - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
