@@ -23,6 +23,7 @@ A complete banking application built with Go featuring:
 ### Technical Features
 
 - ✅ REST API (Gin framework)
+- ✅ gRPC API
 - ✅ SQLC for type-safe SQL queries
 - ✅ Database migrations
 - ✅ JWT & PASETO token support
@@ -47,7 +48,7 @@ simple-bank/
 │ ├── migration/ # Database migrations
 │ ├── mock/ # Mock database for testing
 │ │ ├── store.go # Mock store interface
-│ │ |── query/ # Mock queries
+│ │ └── query/ # Mock queries
 │ │ ├── account.sql
 │ │ ├── entry.sql
 │ │ ├── transfer.sql
@@ -79,8 +80,9 @@ simple-bank/
 │ └── payload.go # Token payload structure
 │
 ├── util/ # Utility functions
+│ └── ... # Various utilities
 │
 └── eks/ # Kubernetes deployment
 ├── aws-auth.yml # AWS IAM auth config
-├── deployment.yml # Deployment config
-└── service.yml # Service config
+├── deployment.yml # Deployment configuration
+└── service.yml # Service configuration
