@@ -59,10 +59,10 @@ A complete banking application built with Go featuring:
 📊 Database Schema
 The application uses a simple but effective schema with the following main entities:
 
-Users: User authentication and profile information
-Accounts: Bank accounts with currency and balance
-Entries: Account balance change records
-Transfers: Money transfer records between accounts
+- Users: User authentication and profile information
+- Accounts: Bank accounts with currency and balance
+- Entries: Account balance change records
+- Transfers: Money transfer records between accounts
 
 ![Database Schema](./docs/images/database_schema.png)
 
