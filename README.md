@@ -30,6 +30,42 @@ A complete banking application built with Go featuring:
 - ✅ Kubernetes deployment (EKS)
 - ✅ Unit tests
 
+## Architecture Overview
+
+```
+┌─────────────────┐    ┌─────────────────┐
+│   REST Client   │    │   gRPC Client   │
+└─────────┬───────┘    └─────────┬───────┘
+          │                      │
+          ▼                      ▼
+┌─────────────────┐    ┌─────────────────┐
+│   Gin Server    │    │   gRPC Server   │
+│   (Port 8080)   │    │   (Port 9090)   │
+└─────────┬───────┘    └─────────┬───────┘
+          │                      │
+          └──────────┬───────────┘
+                     ▼
+           ┌─────────────────┐
+           │   Store Layer   │
+           │   (SQLC)        │
+           └─────────┬───────┘
+                     ▼
+           ┌─────────────────┐
+           │   PostgreSQL    │
+           │   Database      │
+           └─────────────────┘
+```
+
+📊 Database Schema
+The application uses a simple but effective schema with the following main entities:
+
+Users: User authentication and profile information
+Accounts: Bank accounts with currency and balance
+Entries: Account balance change records
+Transfers: Money transfer records between accounts
+
+![Database Schema](./docs/images/database_schema.png)
+
 ## 📂 Project Structure
 
 ```
@@ -47,9 +83,6 @@ simple-bank/
 │
 ├── 📁 db/ # Database layer
 │ ├── 📁 migration/ # SQL migration files
-│ │ ├── 000001_init_schema.up.sql
-│ │ ├── 000001_init_schema.down.sql
-│ │ └── ...
 │ │
 │ ├── 📁 mock/ # Mock database for testing
 │ │ └── store.go # Mock store implementation
